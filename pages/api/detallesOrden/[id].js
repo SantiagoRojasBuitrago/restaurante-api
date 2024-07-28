@@ -1,5 +1,6 @@
-import dbConnect from '../../utils/dbConnect';
-import DetalleOrden from '../../models/DetalleOrden';
+import dbConnect from '../../../utils/dbConnect';
+import DetalleOrden from '../../../models/DetalleOrden';
+
 
 dbConnect();
 

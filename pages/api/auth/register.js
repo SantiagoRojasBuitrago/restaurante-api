@@ -4,6 +4,62 @@ import dbConnect from '../../../utils/dbConnect';
 import User from '../../../models/User';
 import { hashPassword, createToken } from '../../../utils/auth';
 
+
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Registro de nuevo usuario
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: El correo electrónico del usuario.
+ *               password:
+ *                 type: string
+ *                 description: La contraseña del usuario.
+ *     responses:
+ *       201:
+ *         description: Usuario registrado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: El token de autenticación.
+ *       400:
+ *         description: El usuario ya existe
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error.
+ *       500:
+ *         description: Error en el servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Mensaje de error del servidor.
+ */
+
 export default async function handler(req, res) {
   await dbConnect();
 

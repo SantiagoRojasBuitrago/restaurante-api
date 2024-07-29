@@ -16,6 +16,9 @@
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-dist": "^5.17.14",
+    "swagger-ui-react": "^5.17.14",
     "vercel": "^35.2.1"
   },
   "devDependencies": {

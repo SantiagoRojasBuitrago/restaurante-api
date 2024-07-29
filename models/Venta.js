@@ -5,6 +5,9 @@ const VentaSchema = new mongoose.Schema({
   total: { type: Number, required: true },
   usuarioID: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
   restauranteID: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurante', required: true },
+  meseroID: { type: mongoose.Schema.Types.ObjectId, ref: 'Mesero', required: true }, // Agregado
+}, {
+  timestamps: true
 });
 
 export default mongoose.models.Venta || mongoose.model('Venta', VentaSchema);

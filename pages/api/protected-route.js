@@ -1,7 +1,7 @@
 // pages/api/protected-route.js
 
-import { authenticate } from '../../../utils/middleware';
-import dbConnect from '../../../utils/dbConnect';
+import { authenticate } from '../../utils/middleware';
+import dbConnect from '../../utils/dbConnect';
 
 const handler = async (req, res) => {
   await dbConnect();

@@ -1,5 +1,5 @@
 import dbConnect from '../../../utils/dbConnect';
-import Menu from '../../../models/menu';
+import Menu from '../../../models/Menu';
 
 dbConnect();
 

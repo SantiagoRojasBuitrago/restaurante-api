@@ -1,5 +1,5 @@
 import dbConnect from '../../../utils/dbConnect';
-import Orden from '../../../models/orden';
+import Orden from '../../../models/Orden';
 
 dbConnect();
 

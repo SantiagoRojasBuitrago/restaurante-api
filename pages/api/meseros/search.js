@@ -2,7 +2,6 @@ import dbConnect from '../../../utils/dbConnect';
 import Mesero from '../../../models/Mesero';
 import corsMiddleware from '../../../utils/corsMiddleware';
 
-dbConnect();
 
 /**
  * @swagger
@@ -76,6 +75,8 @@ dbConnect();
 
 export default async (req, res) => {
   await corsMiddleware(req, res); 
+
+  await dbConnect();
   const { method } = req;
 
   switch (method) {

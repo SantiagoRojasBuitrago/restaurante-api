@@ -19,3 +19,6 @@ function initMiddleware(middleware) {
 }
 
 const corsMiddleware = initMiddleware(cors);
+
+export default corsMiddleware;
+

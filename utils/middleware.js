@@ -1,9 +1,13 @@
 import { verifyToken } from './auth';
 import corsMiddleware from './corsMiddleware'; // Asegúrate de que la ruta sea correcta
 
+
+
+
 export const authenticate = (handler) => async (req, res) => {
   // Ejecuta el middleware CORS antes de manejar la solicitud
   await corsMiddleware(req, res);
+  
 
   // Autenticación
   const token = req.headers.authorization?.split(' ')[1];

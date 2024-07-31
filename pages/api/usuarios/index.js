@@ -1,3 +1,5 @@
+// Controllers/index.js
+
 import dbConnect from '../../../utils/dbConnect';
 import Usuario from '../../../models/Usuario';
 
@@ -17,7 +19,8 @@ export default async (req, res) => {
       break;
     case 'POST':
       try {
-        const usuario = await Usuario.create(req.body);
+        const { email, password, roles } = req.body;
+        const usuario = await Usuario.create({ email, password, roles });
         res.status(201).json({ success: true, data: usuario });
       } catch (error) {
         res.status(400).json({ success: false });

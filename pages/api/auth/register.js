@@ -4,7 +4,6 @@ import dbConnect from '../../../utils/dbConnect';
 import User from '../../../models/User';
 import { hashPassword, createToken } from '../../../utils/auth';
 
-
 /**
  * @swagger
  * /api/auth/register:
@@ -27,6 +26,11 @@ import { hashPassword, createToken } from '../../../utils/auth';
  *               password:
  *                 type: string
  *                 description: La contraseña del usuario.
+ *               roles:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Roles asignados al usuario. Por defecto, se asigna 'user'.
  *     responses:
  *       201:
  *         description: Usuario registrado exitosamente
@@ -68,7 +72,7 @@ export default async function handler(req, res) {
   switch (method) {
     case 'POST':
       try {
-        const { email, password } = req.body;
+        const { email, password, roles = ['user'] } = req.body;
 
         const existingUser = await User.findOne({ email });
 
@@ -78,7 +82,7 @@ export default async function handler(req, res) {
 
         const hashedPassword = await hashPassword(password);
 
-        const newUser = new User({ email, password: hashedPassword });
+        const newUser = new User({ email, password: hashedPassword, roles });
         await newUser.save();
 
         const token = createToken(newUser);

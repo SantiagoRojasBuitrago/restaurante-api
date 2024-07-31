@@ -36,7 +36,21 @@ import { comparePassword, createToken } from '../../../utils/auth';
  *               properties:
  *                 token:
  *                   type: string
- *                   description: El token de autenticación.
+ *                   description: El token de autenticación que incluye el email, id y roles del usuario.
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       description: El ID del usuario.
+ *                     email:
+ *                       type: string
+ *                       description: El correo electrónico del usuario.
+ *                     roles:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                       description: Los roles asignados al usuario.
  *       400:
  *         description: Usuario no encontrado o contraseña incorrecta
  *         content:
@@ -83,7 +97,15 @@ export default async function handler(req, res) {
 
         const token = createToken(user);
 
-        res.status(200).json({ token });
+        // Incluye toda la información del usuario en la respuesta
+        res.status(200).json({
+          token,
+          user: {
+            id: user._id,
+            email: user.email,
+            roles: user.roles, // Asegúrate de que roles esté definido en el modelo de usuario
+          },
+        });
       } catch (error) {
         res.status(500).json({ message: 'Error en el servidor' });
       }

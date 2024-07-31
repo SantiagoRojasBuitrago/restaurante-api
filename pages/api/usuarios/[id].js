@@ -1,3 +1,5 @@
+// Controllers/[id].js
+
 import dbConnect from '../../../utils/dbConnect';
 import Usuario from '../../../models/Usuario';
 
@@ -20,7 +22,8 @@ export default async (req, res) => {
       break;
     case 'PUT':
       try {
-        const usuario = await Usuario.findByIdAndUpdate(id, req.body, {
+        const { email, password, roles } = req.body;
+        const usuario = await Usuario.findByIdAndUpdate(id, { email, password, roles }, {
           new: true,
           runValidators: true,
         });

@@ -3,7 +3,7 @@ import Cors from 'cors';
 // Inicializa el middleware CORS
 const cors = Cors({
   methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-  origin: '*', // Permite solicitudes desde cualquier origen, ajusta según sea necesario
+  origin: 'http://localhost:3000', // o el dominio de tu frontend en producción/ Permite solicitudes desde cualquier origen, ajusta según sea necesario
 });
 
 function initMiddleware(middleware) {

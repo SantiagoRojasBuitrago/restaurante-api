@@ -13,7 +13,7 @@ const MeseroSchema = new Schema({
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: false
   },
   telefono: {
     type: String,
@@ -22,6 +22,10 @@ const MeseroSchema = new Schema({
   restauranteId: {
     type: Schema.Types.ObjectId,
     ref: 'Restaurante',
+    required: false
+  },
+  numeroIdentidad: {
+    type: String,
     required: true
   }
 }, {

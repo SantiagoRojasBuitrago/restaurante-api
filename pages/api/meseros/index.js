@@ -1,5 +1,5 @@
 import dbConnect from '../../../utils/dbConnect';
-import Mesero from '../../../models/Mesero';
+import User from '../../../models/User';
 
 /**
  * @swagger
@@ -13,7 +13,7 @@ import Mesero from '../../../models/Mesero';
  * /api/meseros/:
  *   get:
  *     summary: Obtener todos los meseros con paginación
- *     description: Obtiene todos los meseros y permite paginar los resultados.
+ *     description: Obtiene todos los usuarios con rol de "waiter" y permite paginar los resultados.
  *     tags: [Meseros]
  *     parameters:
  *       - in: query
@@ -58,6 +58,12 @@ import Mesero from '../../../models/Mesero';
  *                       numeroIdentidad:
  *                         type: string
  *                         description: Número de cédula del mesero.
+ *                       email:
+ *                         type: string
+ *                         description: Email del mesero.
+ *                       password:
+ *                         type: string
+ *                         description: Contraseña del mesero.
  *                 totalPages:
  *                   type: integer
  *                   description: Número total de páginas.
@@ -78,7 +84,7 @@ import Mesero from '../../../models/Mesero';
  *                   description: Mensaje de error.
  *   post:
  *     summary: Crear un nuevo mesero
- *     description: Crea un nuevo mesero con los datos proporcionados.
+ *     description: Crea un nuevo usuario con rol de "waiter" con los datos proporcionados.
  *     tags: [Meseros]
  *     requestBody:
  *       required: true
@@ -102,12 +108,16 @@ import Mesero from '../../../models/Mesero';
  *               email:
  *                 type: string
  *                 description: Email del mesero.
+ *               password:
+ *                 type: string
+ *                 description: Contraseña del mesero.
  *             required:
  *               - nombre
  *               - apellido
  *               - telefono
  *               - numeroIdentidad
  *               - email
+ *               - password
  *     responses:
  *       201:
  *         description: Mesero creado exitosamente.
@@ -139,6 +149,9 @@ import Mesero from '../../../models/Mesero';
  *                     email:
  *                       type: string
  *                       description: Email del mesero.
+ *                     password:
+ *                       type: string
+ *                       description: Contraseña del mesero.
  *       400:
  *         description: Error al crear el mesero.
  *         content:
@@ -161,11 +174,11 @@ export default async (req, res) => {
     case 'GET':
       try {
         const { page = 1, size = 10 } = req.query;
-        const meseros = await Mesero.find()
+        const meseros = await User.find({ roles: 'waiter' })
           .limit(parseInt(size, 10))
           .skip((page - 1) * parseInt(size, 10))
           .exec();
-        const count = await Mesero.countDocuments();
+        const count = await User.countDocuments({ roles: 'waiter' });
         res.status(200).json({ meseros, totalPages: Math.ceil(count / size), currentPage: page });
       } catch (error) {
         res.status(400).json({ success: false, error: error.message });
@@ -173,7 +186,8 @@ export default async (req, res) => {
       break;
     case 'POST':
       try {
-        const mesero = await Mesero.create(req.body);
+        const { nombre, apellido, telefono, numeroIdentidad, email, password } = req.body;
+        const mesero = await User.create({ nombre, apellido, telefono, numeroIdentidad, email, password, roles: ['waiter'] });
         res.status(201).json({ success: true, data: mesero });
       } catch (error) {
         res.status(400).json({ success: false, error: error.message });

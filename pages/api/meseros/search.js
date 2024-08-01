@@ -1,14 +1,13 @@
 import dbConnect from '../../../utils/dbConnect';
-import Mesero from '../../../models/Mesero';
+import User from '../../../models/User';
 import corsMiddleware from '../../../utils/corsMiddleware';
-
 
 /**
  * @swagger
  * /api/meseros/search:
  *   get:
- *     summary: Buscar meseros por nombre y paginación
- *     description: Busca meseros por nombre y permite paginar los resultados.
+ *     summary: Buscar usuarios con rol de mesero por nombre y paginación
+ *     description: Busca usuarios con rol de "waiter" por nombre y permite paginar los resultados.
  *     tags: [Meseros]
  *     parameters:
  *       - in: query
@@ -16,7 +15,7 @@ import corsMiddleware from '../../../utils/corsMiddleware';
  *         schema:
  *           type: string
  *         required: false
- *         description: Nombre del mesero a buscar (búsqueda parcial).
+ *         description: Nombre del usuario a buscar (búsqueda parcial).
  *       - in: query
  *         name: page
  *         schema:
@@ -33,35 +32,31 @@ import corsMiddleware from '../../../utils/corsMiddleware';
  *         description: Cantidad de resultados por página.
  *     responses:
  *       200:
- *         description: Lista de meseros con paginación.
+ *         description: Lista de usuarios con rol de "waiter" y paginación.
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 meseros:
+ *                 users:
  *                   type: array
  *                   items:
  *                     type: object
  *                     properties:
  *                       _id:
  *                         type: string
- *                       nombre:
- *                         type: string
- *                       apellido:
- *                         type: string
  *                       email:
  *                         type: string
- *                       rol:
- *                         type: string
- *                       restauranteId:
- *                         type: string
+ *                       roles:
+ *                         type: array
+ *                         items:
+ *                           type: string
  *                 totalPages:
  *                   type: integer
  *                 currentPage:
  *                   type: integer
  *       400:
- *         description: Error al buscar meseros.
+ *         description: Error al buscar usuarios.
  *         content:
  *           application/json:
  *             schema:
@@ -74,7 +69,7 @@ import corsMiddleware from '../../../utils/corsMiddleware';
  */
 
 export default async (req, res) => {
-  await corsMiddleware(req, res); 
+  await corsMiddleware(req, res);
 
   await dbConnect();
   const { method } = req;
@@ -83,13 +78,16 @@ export default async (req, res) => {
     case 'GET':
       try {
         const { nombre, page = 1, size = 10 } = req.query;
-        const query = nombre ? { nombre: new RegExp(nombre, 'i') } : {};
-        const meseros = await Mesero.find(query)
+        const query = {
+          roles: 'waiter',
+          ...(nombre ? { email: new RegExp(nombre, 'i') } : {})
+        };
+        const users = await User.find(query)
           .limit(parseInt(size, 10))
           .skip((page - 1) * parseInt(size, 10))
           .exec();
-        const count = await Mesero.countDocuments(query);
-        res.status(200).json({ meseros, totalPages: Math.ceil(count / size), currentPage: page });
+        const count = await User.countDocuments(query);
+        res.status(200).json({ users, totalPages: Math.ceil(count / size), currentPage: page });
       } catch (error) {
         res.status(400).json({ success: false, error: error.message });
       }

@@ -59,6 +59,8 @@ import corsMiddleware from '../../../utils/corsMiddleware';
  *                         type: string
  *                       numeroIdentidad:
  *                         type: string
+ *                       estado:
+ *                         type: string
  *                 totalPages:
  *                   type: integer
  *                 currentPage:
@@ -88,6 +90,7 @@ export default async (req, res) => {
         const { nombre, page = 1, size = 10 } = req.query;
         const query = {
           roles: 'waiter',
+          estado: 'Enabled',
           ...(nombre ? { nombre: new RegExp(nombre, 'i') } : {})
         };
         const users = await User.find(query)

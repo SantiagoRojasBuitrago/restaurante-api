@@ -168,7 +168,9 @@ import { hashPassword } from '../../../utils/auth';
  */
 
 export default async (req, res) => {
+  await corsMiddleware(req, res); 
   await dbConnect();
+
   const { method } = req;
 
   switch (method) {
@@ -198,6 +200,7 @@ export default async (req, res) => {
           email,
           password: hashedPassword,
           roles: ['waiter'],
+          estado: 'Enabled',  // Agregamos el estado por defecto
         });
 
         res.status(201).json({ success: true, data: mesero });
@@ -210,3 +213,4 @@ export default async (req, res) => {
       break;
   }
 };
+

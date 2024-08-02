@@ -38,6 +38,11 @@ const UserSchema = new mongoose.Schema({
     trim: true,
     unique: true,  // Asegura que el número de identidad sea único
   },
+  estado: {
+    type: String,
+    enum: ['Enabled', 'Disabled'],  // Solo permite estos valores
+    default: 'Enabled',  // Valor por defecto
+  },
 });
 
 export default mongoose.models.User || mongoose.model('User', UserSchema);

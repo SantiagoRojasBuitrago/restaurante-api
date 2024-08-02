@@ -3,7 +3,6 @@ import User from '../../../models/User';
 import { hashPassword } from '../../../utils/auth';
 import corsMiddleware from '../../../utils/corsMiddleware';
 
-
 /**
  * @swagger
  * /api/meseros/{id}:
@@ -154,13 +153,12 @@ import corsMiddleware from '../../../utils/corsMiddleware';
  *               properties:
  *                 success:
  *                   type: boolean
+ *
+ * 
  */
 
 export default async (req, res) => {
-
-
-
-  await corsMiddleware(req, res); 
+  await corsMiddleware(req, res);
   await dbConnect();
 
   const { method } = req;
@@ -198,8 +196,6 @@ export default async (req, res) => {
         res.status(400).json({ success: false, error: error.message });
       }
       break;
-    default:
-      res.status(400).json({ success: false });
-      break;
+    
   }
 };

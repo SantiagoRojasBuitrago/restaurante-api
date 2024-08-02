@@ -158,10 +158,13 @@ dbConnect();
  */
 
 export default async (req, res) => {
-  await dbConnect();
 
   await corsMiddleware(req, res);
   
+  await dbConnect();
+
+  
+
   const { method } = req;
   const { id } = req.query;
 

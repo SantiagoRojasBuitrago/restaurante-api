@@ -3,7 +3,6 @@ import User from '../../../models/User';
 import { hashPassword } from '../../../utils/auth';
 import corsMiddleware from '../../../utils/corsMiddleware';
 
-dbConnect();
 
 /**
  * @swagger
@@ -160,7 +159,7 @@ dbConnect();
 export default async (req, res) => {
 
   await corsMiddleware(req, res);
-  
+
   await dbConnect();
 
   

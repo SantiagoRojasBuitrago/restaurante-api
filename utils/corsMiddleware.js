@@ -2,7 +2,7 @@ import Cors from 'cors';
 
 // Inicializa el middleware CORS
 const cors = Cors({
-  methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Métodos permitidos
+  methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'], // Métodos permitidos
   origin: '*', // Permite solicitudes desde cualquier origen, ajusta según sea necesario
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // Permite el encabezado Content-Type
 });

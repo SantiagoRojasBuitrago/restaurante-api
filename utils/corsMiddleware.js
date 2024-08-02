@@ -4,7 +4,7 @@ import Cors from 'cors';
 const cors = Cors({
   methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Métodos permitidos
   origin: '*', // Permite solicitudes desde cualquier origen, ajusta según sea necesario
-  allowedHeaders: ['Content-Type', 'Authorization'], // Permite el encabezado Content-Type
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // Permite el encabezado Content-Type
 });
 
 function initMiddleware(middleware) {

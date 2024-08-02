@@ -157,6 +157,12 @@ import corsMiddleware from '../../../utils/corsMiddleware';
  */
 
 export default async (req, res) => {
+  // Maneja solicitudes OPTIONS antes de cualquier otra lógica
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    return res.status(200).end();
+  }
 
   try {
     await corsMiddleware(req, res); // Asegúrate de que CORS se ejecute primero
@@ -166,8 +172,6 @@ export default async (req, res) => {
 
   await dbConnect();
 
-
-
   const { method } = req;
   const { id } = req.query;
 
@@ -175,11 +179,9 @@ export default async (req, res) => {
     case 'GET':
       try {
         const mesero = await User.findById(id).exec();
-
         if (!mesero || mesero.roles.indexOf('waiter') === -1) {
           return res.status(404).json({ success: false });
         }
-
         res.status(200).json({ success: true, data: mesero });
       } catch (error) {
         res.status(400).json({ success: false, error: error.message });
@@ -189,21 +191,17 @@ export default async (req, res) => {
       try {
         const { password, ...rest } = req.body;
         let updatedFields = { ...rest };
-
         if (password) {
           const hashedPassword = await hashPassword(password);
           updatedFields.password = hashedPassword;
         }
-
         const mesero = await User.findByIdAndUpdate(id, updatedFields, {
           new: true,
           runValidators: true,
         }).exec();
-
         if (!mesero || mesero.roles.indexOf('waiter') === -1) {
           return res.status(404).json({ success: false });
         }
-
         res.status(200).json({ success: true, data: mesero });
       } catch (error) {
         res.status(400).json({ success: false, error: error.message });

@@ -158,11 +158,16 @@ import corsMiddleware from '../../../utils/corsMiddleware';
 
 export default async (req, res) => {
 
-  await corsMiddleware(req, res);
+  try {
+    await corsMiddleware(req, res);
+  } catch (error) {
+    return res.status(500).json({ success: false, error: 'CORS middleware failed' });
+  }
+
 
   await dbConnect();
 
-  
+
 
   const { method } = req;
   const { id } = req.query;

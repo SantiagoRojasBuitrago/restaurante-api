@@ -1,5 +1,6 @@
 import dbConnect from '../../../../utils/dbConnect';
 import User from '../../../../models/User';
+import corsMiddleware from '../../../../utils/corsMiddleware';
 
 /**
  * @swagger
@@ -70,6 +71,7 @@ import User from '../../../../models/User';
  */
 
 export default async (req, res) => {
+  await corsMiddleware(req, res);
   await dbConnect();
 
   const { method } = req;

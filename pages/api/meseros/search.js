@@ -51,6 +51,14 @@ import corsMiddleware from '../../../utils/corsMiddleware';
  *                         type: array
  *                         items:
  *                           type: string
+ *                       nombre:
+ *                         type: string
+ *                       apellido:
+ *                         type: string
+ *                       telefono:
+ *                         type: string
+ *                       numeroIdentidad:
+ *                         type: string
  *                 totalPages:
  *                   type: integer
  *                 currentPage:
@@ -80,14 +88,14 @@ export default async (req, res) => {
         const { nombre, page = 1, size = 10 } = req.query;
         const query = {
           roles: 'waiter',
-          ...(nombre ? { email: new RegExp(nombre, 'i') } : {})
+          ...(nombre ? { nombre: new RegExp(nombre, 'i') } : {})
         };
         const users = await User.find(query)
           .limit(parseInt(size, 10))
           .skip((page - 1) * parseInt(size, 10))
           .exec();
         const count = await User.countDocuments(query);
-        res.status(200).json({ users, totalPages: Math.ceil(count / size), currentPage: page });
+        res.status(200).json({ users, totalPages: Math.ceil(count / size), currentPage: parseInt(page, 10) });
       } catch (error) {
         res.status(400).json({ success: false, error: error.message });
       }

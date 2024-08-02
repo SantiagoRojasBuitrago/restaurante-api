@@ -1,5 +1,3 @@
-// models/User.js
-
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
@@ -18,6 +16,27 @@ const UserSchema = new mongoose.Schema({
   roles: {
     type: [String],  // Array de strings para los roles
     default: ['user'],  // Rol por defecto
+  },
+  nombre: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  apellido: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  telefono: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  numeroIdentidad: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,  // Asegura que el número de identidad sea único
   },
 });
 

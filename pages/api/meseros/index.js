@@ -1,5 +1,6 @@
 import dbConnect from '../../../utils/dbConnect';
 import User from '../../../models/User';
+import { hashPassword } from '../../../utils/auth';
 
 /**
  * @swagger
@@ -179,7 +180,7 @@ export default async (req, res) => {
           .skip((page - 1) * parseInt(size, 10))
           .exec();
         const count = await User.countDocuments({ roles: 'waiter' });
-        res.status(200).json({ meseros, totalPages: Math.ceil(count / size), currentPage: page });
+        res.status(200).json({ meseros, totalPages: Math.ceil(count / size), currentPage: parseInt(page, 10) });
       } catch (error) {
         res.status(400).json({ success: false, error: error.message });
       }
@@ -187,7 +188,18 @@ export default async (req, res) => {
     case 'POST':
       try {
         const { nombre, apellido, telefono, numeroIdentidad, email, password } = req.body;
-        const mesero = await User.create({ nombre, apellido, telefono, numeroIdentidad, email, password, roles: ['waiter'] });
+
+        const hashedPassword = await hashPassword(password);
+        const mesero = await User.create({
+          nombre,
+          apellido,
+          telefono,
+          numeroIdentidad,
+          email,
+          password: hashedPassword,
+          roles: ['waiter'],
+        });
+
         res.status(201).json({ success: true, data: mesero });
       } catch (error) {
         res.status(400).json({ success: false, error: error.message });

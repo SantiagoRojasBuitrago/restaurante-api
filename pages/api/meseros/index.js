@@ -1,6 +1,7 @@
 import dbConnect from '../../../utils/dbConnect';
 import User from '../../../models/User';
 import { hashPassword } from '../../../utils/auth';
+import corsMiddleware from '../../../utils/corsMiddleware';
 
 /**
  * @swagger

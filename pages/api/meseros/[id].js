@@ -1,6 +1,7 @@
 import dbConnect from '../../../utils/dbConnect';
 import User from '../../../models/User';
 import { hashPassword } from '../../../utils/auth';
+import corsMiddleware from '../../../utils/corsMiddleware';
 
 dbConnect();
 
@@ -158,6 +159,9 @@ dbConnect();
 
 export default async (req, res) => {
   await dbConnect();
+
+  await corsMiddleware(req, res);
+  
   const { method } = req;
   const { id } = req.query;
 

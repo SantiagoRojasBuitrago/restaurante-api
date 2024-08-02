@@ -157,19 +157,10 @@ import corsMiddleware from '../../../utils/corsMiddleware';
  */
 
 export default async (req, res) => {
-  // Maneja solicitudes OPTIONS antes de cualquier otra lógica
-  if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    return res.status(200).end();
-  }
 
-  try {
-    await corsMiddleware(req, res); // Asegúrate de que CORS se ejecute primero
-  } catch (error) {
-    return res.status(500).json({ success: false, error: 'CORS middleware failed' });
-  }
 
+
+  await corsMiddleware(req, res); 
   await dbConnect();
 
   const { method } = req;

@@ -1,9 +1,140 @@
 import dbConnect from '../../../utils/dbConnect';
+import corsMiddleware from '../../../utils/corsMiddleware';
 import Menu from '../../../models/Menu';
 
-dbConnect();
+
+
+/**
+ * @swagger
+ * /api/menus/{id}:
+ *   get:
+ *     summary: Obtener un ítem del menú por ID
+ *     tags: [Menu]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del ítem del menú
+ *     responses:
+ *       200:
+ *         description: Ítem del menú obtenido exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   $ref: '#/components/schemas/Menu'
+ *       404:
+ *         description: Ítem no encontrado
+ *       400:
+ *         description: Error en la solicitud
+ *   put:
+ *     summary: Actualizar un ítem del menú
+ *     tags: [Menu]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del ítem del menú
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Menu'
+ *     responses:
+ *       200:
+ *         description: Ítem actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   $ref: '#/components/schemas/Menu'
+ *       404:
+ *         description: Ítem no encontrado
+ *       400:
+ *         description: Error en la solicitud
+ *   delete:
+ *     summary: Eliminar un ítem del menú
+ *     tags: [Menu]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del ítem del menú
+ *     responses:
+ *       200:
+ *         description: Ítem eliminado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   additionalProperties: false
+ *       404:
+ *         description: Ítem no encontrado
+ *       400:
+ *         description: Error en la solicitud
+ * components:
+ *   schemas:
+ *     Menu:
+ *       type: object
+ *       required:
+ *         - nombre
+ *         - ingredientes
+ *         - precio
+ *         - estado
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: ID autogenerado del ítem
+ *         nombre:
+ *           type: string
+ *           description: Nombre del ítem
+ *         ingredientes:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: Ingredientes del ítem
+ *         precio:
+ *           type: number
+ *           description: Precio del ítem
+ *         estado:
+ *           type: string
+ *           description: Estado del ítem (Enabled o Disabled)
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha de creación
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha de última actualización
+ */
 
 export default async (req, res) => {
+
+  await corsMiddleware(req, res);
+  await dbConnect();
+
   const { query: { id }, method } = req;
 
   switch (method) {

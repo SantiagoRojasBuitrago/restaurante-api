@@ -2,10 +2,14 @@ import mongoose from 'mongoose';
 
 const MenuSchema = new mongoose.Schema({
   nombre: { type: String, required: true },
-  descripcion: { type: String, required: true },
+  ingredientes: { type: [String], required: true },
   precio: { type: Number, required: true },
-  categoriaID: { type: mongoose.Schema.Types.ObjectId, ref: 'CategoriaMenu', required: true },
-  restauranteID: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurante', required: true },
+  estado: {
+    type: String,
+    enum: ['Enabled', 'Disabled'],
+    default: 'Enabled',
+    required: true
+  }
 }, {
   timestamps: true
 });

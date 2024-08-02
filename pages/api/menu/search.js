@@ -1,14 +1,13 @@
 import dbConnect from '../../../utils/dbConnect';
 import Menu from '../../../models/Menu';
-
-dbConnect();
+import corsMiddleware from '../../../utils/corsMiddleware';
 
 /**
  * @swagger
  * /api/menu/search:
  *   get:
  *     summary: Buscar elementos del menú por nombre y paginación
- *     description: Busca elementos del menú por nombre y permite paginar los resultados.
+ *     description: Busca elementos del menú por nombre, filtrando solo los que están habilitados (Enabled) y permite paginar los resultados.
  *     tags: [Menu]
  *     parameters:
  *       - in: query
@@ -48,13 +47,13 @@ dbConnect();
  *                         type: string
  *                       nombre:
  *                         type: string
- *                       descripcion:
- *                         type: string
+ *                       ingredientes:
+ *                         type: array
+ *                         items:
+ *                           type: string
  *                       precio:
  *                         type: number
- *                       categoriaId:
- *                         type: string
- *                       restauranteId:
+ *                       estado:
  *                         type: string
  *                 totalPages:
  *                   type: integer
@@ -74,19 +73,27 @@ dbConnect();
  */
 
 export default async (req, res) => {
+  await corsMiddleware(req, res);
+  await dbConnect();
+
   const { method } = req;
 
   switch (method) {
     case 'GET':
       try {
         const { nombre, page = 1, size = 10 } = req.query;
-        const query = nombre ? { nombre: new RegExp(nombre, 'i') } : {};
+        const query = {
+          estado: 'Enabled',
+          ...(nombre ? { nombre: new RegExp(nombre, 'i') } : {})
+        };
+
         const menuItems = await Menu.find(query)
           .limit(parseInt(size, 10))
           .skip((page - 1) * parseInt(size, 10))
           .exec();
+
         const count = await Menu.countDocuments(query);
-        res.status(200).json({ menuItems, totalPages: Math.ceil(count / size), currentPage: page });
+        res.status(200).json({ menuItems, totalPages: Math.ceil(count / size), currentPage: parseInt(page, 10) });
       } catch (error) {
         res.status(400).json({ success: false, error: error.message });
       }
